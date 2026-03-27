@@ -1,0 +1,74 @@
+@use 'variables' as *;
+
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Manrope:wght@400;500;700&display=swap');
+
+:root {
+  font-family: 'Manrope', 'Segoe UI', sans-serif;
+  line-height: 1.45;
+  color: $slate-900;
+  background: #f6fbff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(251, 146, 60, 0.18), transparent 32%),
+    radial-gradient(circle at 85% 10%, rgba($sky-500, 0.18), transparent 36%),
+    linear-gradient(180deg, #eff6ff 0%, $slate-50 60%);
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'Chakra Petch', 'Segoe UI', sans-serif;
+  letter-spacing: 0.2px;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid $slate-300;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, $orange-600, $orange-400);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba($orange-600, 0.3);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 16px rgba($orange-600, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}

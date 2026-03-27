@@ -1,0 +1,108 @@
+@use '../../styles/variables' as *;
+
+.quiz-card {
+  border: 1px solid $slate-300;
+  border-radius: 14px;
+  padding: 18px;
+  margin-top: 14px;
+  background: #fff;
+
+  h3 {
+    margin: 8px 0 14px;
+  }
+}
+
+.progress {
+  margin: 0;
+  color: $sky-500;
+  font-weight: 700;
+}
+
+.options {
+  display: grid;
+  gap: 8px;
+}
+
+.option {
+  text-align: left;
+  border: 1px solid $slate-200;
+  border-radius: 10px;
+  background: $slate-50;
+  color: $slate-900;
+  font-weight: 500;
+
+  .opt-letter {
+    font-weight: 700;
+    margin-right: 2px;
+  }
+
+  &:hover:not(:disabled) {
+    background: $sky-100;
+  }
+
+  &.selected {
+    border-color: $sky-500;
+    background: $sky-100;
+  }
+
+  &.correct {
+    border-color: $green-600;
+    background: $green-100;
+  }
+
+  &.wrong {
+    border-color: $red-600;
+    background: $red-100;
+  }
+}
+
+.multi-hint {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: $orange-600;
+  font-weight: 500;
+}
+
+.btn-confirm {
+  margin-top: 10px;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  background: linear-gradient(135deg, $sky-500, #38bdf8);
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba($sky-500, 0.35);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba($sky-500, 0.45);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.result-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+
+  p {
+    margin: 0;
+    color: $slate-700;
+  }
+}
+
+.done {
+  text-align: center;
+}
+
+.muted {
+  margin-top: 12px;
+  color: $slate-600;
+}
