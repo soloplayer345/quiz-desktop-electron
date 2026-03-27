@@ -8,7 +8,7 @@
 
 .tab {
   border: 1px solid $slate-300;
-  background: #ffffff;
+  background: var(--color-surface);
   color: $slate-900;
   border-radius: 999px;
   padding: 10px 16px;
@@ -22,7 +22,7 @@
 
   &.active {
     background: $slate-900;
-    color: #fff;
+    color: var(--color-surface);
     border-color: $slate-900;
   }
 }

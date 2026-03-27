@@ -6,11 +6,42 @@
   font-family: 'Manrope', 'Segoe UI', sans-serif;
   line-height: 1.45;
   color: $slate-900;
-  background: #f6fbff;
+  background: var(--color-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  // ── Theme tokens (override these to switch themes) ──
+  --color-bg:             #{$blue-50};
+  --color-surface:        #{$white};
+  --color-surface-panel:  rgba(255, 255, 255, 0.85);
+
+  --color-primary:        #{$sky-500};
+  --color-primary-light:  #{$sky-400};
+  --color-primary-bg:     #{$sky-100};
+
+  --color-danger:         #{$red-600};
+  --color-danger-light:   #{$red-500};
+  --color-danger-bg:      #{$red-100};
+
+  --color-success:        #{$green-600};
+  --color-success-bg:     #{$green-100};
+
+  --color-accent:         #{$orange-600};
+  --color-accent-light:   #{$orange-400};
+
+  --color-text:           #{$slate-900};
+  --color-text-muted:     #{$slate-600};
+  --color-text-secondary: #{$slate-700};
+
+  --color-border:         #{$slate-300};
+  --color-border-subtle:  #{$slate-200};
+  --color-subtle-bg:      #{$slate-50};
+
+  --color-hero-base:      #{$slate-900};
+  --color-hero-mid:       #{$slate-800};
+  --color-hero-deep:      #{$navy-900};
 }
 
 * {
@@ -21,9 +52,9 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 15% 15%, rgba(251, 146, 60, 0.18), transparent 32%),
+    radial-gradient(circle at 15% 15%, rgba($orange-400, 0.18), transparent 32%),
     radial-gradient(circle at 85% 10%, rgba($sky-500, 0.18), transparent 36%),
-    linear-gradient(180deg, #eff6ff 0%, $slate-50 60%);
+    linear-gradient(180deg, $blue-50 0%, $slate-50 60%);
 }
 
 h1,
@@ -48,7 +79,7 @@ select {
   border-radius: 10px;
   border: 1px solid $slate-300;
   padding: 10px 12px;
-  background: #fff;
+  background: var(--color-surface);
 }
 
 button {
@@ -56,7 +87,7 @@ button {
   border-radius: 10px;
   padding: 10px 14px;
   background: linear-gradient(135deg, $orange-600, $orange-400);
-  color: #fff;
+  color: var(--color-surface);
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 3px 10px rgba($orange-600, 0.3);

@@ -46,8 +46,8 @@
   padding: 7px 16px;
   font-size: 13px;
   font-weight: 700;
-  background: linear-gradient(135deg, $sky-500, #38bdf8);
-  color: #fff;
+  background: linear-gradient(135deg, $sky-500, $sky-400);
+  color: var(--color-surface);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba($sky-500, 0.35);
   transition: transform 150ms ease, box-shadow 150ms ease;
@@ -62,8 +62,8 @@
   padding: 7px 16px;
   font-size: 13px;
   font-weight: 700;
-  background: linear-gradient(135deg, $red-600, #ef4444);
-  color: #fff;
+  background: linear-gradient(135deg, $red-600, $red-500);
+  color: var(--color-surface);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba($red-600, 0.35);
   transition: transform 150ms ease, box-shadow 150ms ease;

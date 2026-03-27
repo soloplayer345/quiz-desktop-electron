@@ -1,7 +1,7 @@
 @use '../../styles/variables' as *;
 
 .panel {
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--color-surface-panel);
   border: 1px solid rgba($slate-900, 0.09);
   border-radius: 18px;
   padding: 22px;

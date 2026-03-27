@@ -5,7 +5,7 @@
   border-radius: 14px;
   padding: 18px;
   margin-top: 14px;
-  background: #fff;
+  background: var(--color-surface);
 
   h3 {
     margin: 8px 0 14px;
@@ -68,8 +68,8 @@
   padding: 8px 20px;
   font-size: 14px;
   font-weight: 700;
-  background: linear-gradient(135deg, $sky-500, #38bdf8);
-  color: #fff;
+  background: linear-gradient(135deg, $sky-500, $sky-400);
+  color: var(--color-surface);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba($sky-500, 0.35);
   transition: transform 150ms ease, box-shadow 150ms ease;
