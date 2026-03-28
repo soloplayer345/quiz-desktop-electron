@@ -1,0 +1,56 @@
+@use '../../styles/variables' as v;
+
+.update-banner {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  white-space: nowrap;
+
+  &--info {
+    background: v.$slate-800;
+    color: v.$sky-400;
+    border: 1px solid v.$slate-700;
+  }
+
+  &--ready {
+    background: v.$green-600;
+    color: v.$white;
+  }
+
+  &__icon {
+    font-size: 1rem;
+  }
+
+  &__progress {
+    margin-left: 0.25rem;
+    opacity: 0.8;
+    font-size: 0.8rem;
+  }
+
+  &__btn {
+    margin-left: 0.5rem;
+    padding: 0.3rem 0.85rem;
+    background: v.$white;
+    color: v.$green-600;
+    border: none;
+    border-radius: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}

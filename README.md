@@ -148,6 +148,49 @@ quiz-desktop-electron/
 
 ---
 
+## Auto Update
+
+Ứng dụng tích hợp tính năng tự động cập nhật qua **GitHub Releases** (dùng `electron-updater`).
+
+### Cách hoạt động
+
+1. Khi khởi động (bản production), ứng dụng tự kiểm tra GitHub Releases xem có bản mới không.
+2. Nếu có, bản cập nhật được **tải ngầm** — một banner sẽ hiện ở cuối màn hình thông báo tiến trình.
+3. Sau khi tải xong, banner chuyển sang nút **"Khởi động lại để cập nhật"** — nhấn vào là xong.
+
+> Auto update **không hoạt động** trong chế độ `bun run dev`, chỉ có hiệu lực với bản build đã đóng gói.
+
+### Cách phát hành bản cập nhật
+
+#### Bước 1 — Tăng version
+
+Mở `package.json`, cập nhật trường `version`:
+
+```json
+{
+  "version": "1.0.1"
+}
+```
+
+#### Bước 2 — Build ứng dụng
+
+```bash
+bun run dist
+```
+
+File build sẽ xuất ra thư mục `release/`.
+
+#### Bước 3 — Tạo GitHub Release
+
+1. Vào trang GitHub repo → **Releases** → **Draft a new release**
+2. Tạo tag mới khớp với version, ví dụ: `v1.0.1`
+3. Đính kèm toàn bộ file trong `release/` vào release (`.exe`, `.yml`, v.v.)
+4. Nhấn **Publish release**
+
+Người dùng đang chạy bản cũ sẽ nhận thông báo cập nhật tự động trong lần khởi động tiếp theo.
+
+---
+
 ## Định dạng file chia sẻ quiz (`.quiz.json`)
 
 ```json

@@ -68,8 +68,27 @@ export default function SubjectsPanel({ subjects, onUpdateSubjects, onToast }) {
 
     try {
       const newSubject = await importSubjectFromFile(file)
-      onUpdateSubjects([...subjects, newSubject])
-      onToast(`Đã nhập "${newSubject.name}" (${newSubject.questions.length} câu hỏi)`)
+      const existing = subjects.find(
+        (s) => s.name.trim().toLowerCase() === newSubject.name.trim().toLowerCase()
+      )
+
+      if (existing) {
+        const existingPrompts = new Set(existing.questions.map((q) => q.prompt.trim().toLowerCase()))
+        const toAdd = newSubject.questions.filter(
+          (q) => !existingPrompts.has(q.prompt.trim().toLowerCase())
+        )
+        const merged = { ...existing, questions: [...existing.questions, ...toAdd] }
+        onUpdateSubjects(subjects.map((s) => (s.id === existing.id ? merged : s)))
+        onToast(
+          toAdd.length > 0
+            ? `Đã gộp vào "${existing.name}": +${toAdd.length} câu mới (bỏ qua ${newSubject.questions.length - toAdd.length} câu trùng)`
+            : `Không có câu hỏi mới để gộp vào "${existing.name}"`,
+          toAdd.length > 0 ? 'success' : 'info'
+        )
+      } else {
+        onUpdateSubjects([...subjects, newSubject])
+        onToast(`Đã nhập "${newSubject.name}" (${newSubject.questions.length} câu hỏi)`)
+      }
     } catch (err) {
       onToast(err.message, 'danger')
     }

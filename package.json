@@ -1,7 +1,7 @@
 {
   "name": "quiz-desktop-electron",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -13,9 +13,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "dist": "vite build && electron-builder",
-    "clean": "node -e \"const fs=require('fs');['node_modules','dist','release'].forEach(d=>{try{fs.rmSync(d,{recursive:true,force:true});console.log('removed',d)}catch{}})\"" 
+    "clean": "node -e \"const fs=require('fs');['node_modules','dist','release'].forEach(d=>{try{fs.rmSync(d,{recursive:true,force:true});console.log('removed',d)}catch{}})\""
   },
   "dependencies": {
+    "electron-updater": "^6.8.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
@@ -57,6 +58,11 @@
     "linux": {
       "target": "AppImage",
       "icon": "public/icon.png"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "soloplayer345",
+      "repo": "quiz-desktop-electron"
     }
   }
 }

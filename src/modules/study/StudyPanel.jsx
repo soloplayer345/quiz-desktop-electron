@@ -6,7 +6,9 @@ import './StudyPanel.scss'
 // Backward-compat: build options array regardless of old vs new format
 function buildOptions(q) {
   if (q.options) {
-    return shuffle(q.options.map((o) => ({ ...o })))
+    return shuffle(
+      q.options.map((o, i) => ({ ...o, label: String.fromCharCode(65 + i) }))
+    )
   }
   return shuffle([
     { label: 'A', text: q.correct, correct: true },
@@ -187,7 +189,7 @@ export default function StudyPanel({ subjects }) {
                     disabled={Boolean(currentAnswer)}
                     className={cls}
                   >
-                    <span className="opt-letter">{option.label}.</span> {option.text}
+                    <span className="opt-letter">{option.label}</span> {option.text}
                   </button>
                 )
               }
@@ -200,7 +202,7 @@ export default function StudyPanel({ subjects }) {
                   disabled={Boolean(currentAnswer)}
                   className={cls}
                 >
-                  <span className="opt-letter">{option.label}.</span> {option.text}
+                  <span className="opt-letter">{option.label}</span> {option.text}
                 </button>
               )
             })}

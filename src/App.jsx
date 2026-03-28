@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Hero from './components/Hero/Hero'
 import Tabs from './components/Tabs/Tabs'
 import Toast from './components/Toast/Toast'
+import UpdateBanner from './components/UpdateBanner/UpdateBanner'
 import SubjectsPanel from './modules/subjects/SubjectsPanel'
 import QuestionsPanel from './modules/questions/QuestionsPanel'
 import StudyPanel from './modules/study/StudyPanel'
@@ -15,9 +16,21 @@ function App() {
   const [subjects, setSubjects] = useState([])
   const [tab, setTab] = useState('subjects')
   const [toasts, setToasts] = useState([])
+  const [updateState, setUpdateState] = useState(null) // 'available' | 'ready'
+  const [downloadProgress, setDownloadProgress] = useState(null)
 
   useEffect(() => {
     loadSubjectsAsync().then(setSubjects)
+  }, [])
+
+  useEffect(() => {
+    if (!window.updater) return
+    window.updater.onUpdateAvailable(() => setUpdateState('available'))
+    window.updater.onDownloadProgress((p) => setDownloadProgress(p.percent))
+    window.updater.onUpdateDownloaded(() => {
+      setUpdateState('ready')
+      setDownloadProgress(null)
+    })
   }, [])
 
   function showToast(message, type = 'success') {
@@ -49,6 +62,11 @@ function App() {
       )}
 
       <Toast toasts={toasts} />
+      <UpdateBanner
+        state={updateState}
+        progress={downloadProgress}
+        onInstall={() => window.updater?.install()}
+      />
     </main>
   )
 }
