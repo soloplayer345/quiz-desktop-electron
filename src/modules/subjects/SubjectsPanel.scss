@@ -58,6 +58,51 @@
   }
 }
 
+.btn-export {
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  background: transparent;
+  color: $green-600;
+  border: 1.5px solid $green-600;
+  border-radius: 8px;
+  box-shadow: none;
+  transition: background 150ms ease, color 150ms ease, transform 150ms ease;
+
+  &:hover {
+    background: $green-100;
+    transform: translateY(-1px);
+  }
+}
+
+.btn-import {
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  background: transparent;
+  color: $sky-500;
+  border: 1.5px solid $sky-500;
+  border-radius: 8px;
+  box-shadow: none;
+  white-space: nowrap;
+  transition: background 150ms ease, color 150ms ease, transform 150ms ease;
+
+  &:hover {
+    background: $sky-100;
+    transform: translateY(-1px);
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .btn-delete {
   padding: 7px 16px;
   font-size: 13px;

@@ -11,7 +11,9 @@
     "build": "vite build",
     "start": "electron .",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dist": "vite build && electron-builder",
+    "clean": "node -e \"const fs=require('fs');['node_modules','dist','release'].forEach(d=>{try{fs.rmSync(d,{recursive:true,force:true});console.log('removed',d)}catch{}})\"" 
   },
   "dependencies": {
     "react": "^19.2.4",
@@ -25,6 +27,7 @@
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
     "electron": "^41.0.3",
+    "electron-builder": "^26.8.1",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
@@ -32,5 +35,28 @@
     "sass": "^1.98.0",
     "vite": "^8.0.1",
     "wait-on": "^9.0.4"
+  },
+  "build": {
+    "appId": "com.soloplayer345.quiz-desktop",
+    "productName": "Quiz Desktop",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "public/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "public/icon.png"
+    }
   }
 }

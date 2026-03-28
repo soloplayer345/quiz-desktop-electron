@@ -8,3 +8,10 @@
     transform: translateY(0);
   }
 }
+
+@keyframes toast-life {
+  0%   { opacity: 0; transform: translateY(16px) scale(0.95); }
+  12%  { opacity: 1; transform: translateY(0)   scale(1);    }
+  80%  { opacity: 1; transform: translateY(0)   scale(1);    }
+  100% { opacity: 0; transform: translateY(-8px) scale(0.97); }
+}

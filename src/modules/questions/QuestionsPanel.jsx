@@ -11,6 +11,8 @@ function emptyOptions() {
   return [
     { text: '', correct: false },
     { text: '', correct: false },
+    { text: '', correct: false },
+    { text: '', correct: false },
   ]
 }
 
@@ -23,7 +25,7 @@ function questionToOptions(question) {
   ]
 }
 
-export default function QuestionsPanel({ subjects, onUpdateSubjects }) {
+export default function QuestionsPanel({ subjects, onUpdateSubjects, onToast }) {
   const [selectedId, setSelectedId] = useState('')
   const [questionText, setQuestionText] = useState('')
   const [options, setOptions] = useState(emptyOptions)
@@ -81,6 +83,7 @@ export default function QuestionsPanel({ subjects, onUpdateSubjects }) {
 
     onUpdateSubjects(nextSubjects)
     clearForm()
+    onToast('Đã thêm câu hỏi')
   }
 
   function startEdit(question) {
@@ -136,6 +139,7 @@ export default function QuestionsPanel({ subjects, onUpdateSubjects }) {
 
     onUpdateSubjects(nextSubjects)
     cancelEdit()
+    onToast('Đã cập nhật câu hỏi')
   }
 
   function deleteQuestion(questionId) {
@@ -149,6 +153,7 @@ export default function QuestionsPanel({ subjects, onUpdateSubjects }) {
     })
 
     onUpdateSubjects(nextSubjects)
+    onToast('Đã xóa câu hỏi', 'danger')
   }
 
   return (

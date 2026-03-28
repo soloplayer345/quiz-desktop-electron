@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Panel from '../../components/Panel/Panel'
 import { makeId } from '../../utils/helpers'
+import { exportSubject, importSubjectFromFile } from '../../utils/transfer'
 import './SubjectsPanel.scss'
 
-export default function SubjectsPanel({ subjects, onUpdateSubjects }) {
+export default function SubjectsPanel({ subjects, onUpdateSubjects, onToast }) {
   const [name, setName] = useState('')
   const [editingId, setEditingId] = useState(null)
   const [editName, setEditName] = useState('')
@@ -21,6 +22,7 @@ export default function SubjectsPanel({ subjects, onUpdateSubjects }) {
       { id: makeId('subject'), name: trimmed, questions: [] },
     ])
     setName('')
+    onToast('Đã thêm môn học')
   }
 
   function startEdit(subject) {
@@ -44,10 +46,33 @@ export default function SubjectsPanel({ subjects, onUpdateSubjects }) {
     )
     setEditingId(null)
     setEditName('')
+    onToast('Đã cập nhật môn học')
   }
 
   function deleteSubject(subjectId) {
     onUpdateSubjects(subjects.filter((s) => s.id !== subjectId))
+    onToast('Đã xóa môn học', 'danger')
+  }
+
+  function handleExport(subject) {
+    exportSubject(subject)
+    onToast(`Đã xuất "${subject.name}"`)
+  }
+
+  const importRef = useRef(null)
+
+  async function handleImportFile(event) {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+
+    try {
+      const newSubject = await importSubjectFromFile(file)
+      onUpdateSubjects([...subjects, newSubject])
+      onToast(`Đã nhập "${newSubject.name}" (${newSubject.questions.length} câu hỏi)`)
+    } catch (err) {
+      onToast(err.message, 'danger')
+    }
   }
 
   return (
@@ -59,6 +84,16 @@ export default function SubjectsPanel({ subjects, onUpdateSubjects }) {
           placeholder="Ví dụ: Toán, Lý, Hóa"
         />
         <button type="submit">Thêm môn</button>
+        <button type="button" className="btn-import" onClick={() => importRef.current?.click()}>
+          Nhập từ JSON
+        </button>
+        <input
+          ref={importRef}
+          type="file"
+          accept=".json,application/json"
+          className="visually-hidden"
+          onChange={handleImportFile}
+        />
       </form>
 
       <div className="subject-list">
@@ -88,6 +123,7 @@ export default function SubjectsPanel({ subjects, onUpdateSubjects }) {
                   <h3>{subject.name}</h3>
                   <p>{subject.questions.length} câu hỏi</p>
                   <div className="action-buttons">
+                    <button type="button" className="btn-export" onClick={() => handleExport(subject)} title="Xuất file JSON">⬇ Xuất</button>
                     <button type="button" className="btn-edit" onClick={() => startEdit(subject)}>Sửa</button>
                     <button type="button" className="btn-delete" onClick={() => deleteSubject(subject.id)}>Xóa</button>
                   </div>

@@ -1,15 +1,32 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Hero from './components/Hero/Hero'
 import Tabs from './components/Tabs/Tabs'
+import Toast from './components/Toast/Toast'
 import SubjectsPanel from './modules/subjects/SubjectsPanel'
 import QuestionsPanel from './modules/questions/QuestionsPanel'
 import StudyPanel from './modules/study/StudyPanel'
-import { loadSubjects, saveSubjects } from './utils/storage'
+import { loadSubjectsAsync, saveSubjects } from './utils/storage'
+import { makeId } from './utils/helpers'
 import './App.scss'
 
+const TOAST_DURATION = 2600
+
 function App() {
-  const [subjects, setSubjects] = useState(loadSubjects)
+  const [subjects, setSubjects] = useState([])
   const [tab, setTab] = useState('subjects')
+  const [toasts, setToasts] = useState([])
+
+  useEffect(() => {
+    loadSubjectsAsync().then(setSubjects)
+  }, [])
+
+  function showToast(message, type = 'success') {
+    const id = makeId('toast')
+    setToasts((prev) => [...prev, { id, message, type }])
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id))
+    }, TOAST_DURATION)
+  }
 
   function updateSubjects(nextSubjects) {
     setSubjects(nextSubjects)
@@ -22,14 +39,16 @@ function App() {
       <Tabs active={tab} onChange={setTab} />
 
       {tab === 'subjects' && (
-        <SubjectsPanel subjects={subjects} onUpdateSubjects={updateSubjects} />
+        <SubjectsPanel subjects={subjects} onUpdateSubjects={updateSubjects} onToast={showToast} />
       )}
       {tab === 'questions' && (
-        <QuestionsPanel subjects={subjects} onUpdateSubjects={updateSubjects} />
+        <QuestionsPanel subjects={subjects} onUpdateSubjects={updateSubjects} onToast={showToast} />
       )}
       {tab === 'study' && (
         <StudyPanel subjects={subjects} />
       )}
+
+      <Toast toasts={toasts} />
     </main>
   )
 }
