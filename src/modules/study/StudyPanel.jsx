@@ -16,14 +16,8 @@ function buildOptions(q) {
   ])
 }
 
-export default function StudyPanel({ subjects }) {
-  const [studySubjectId, setStudySubjectId] = useState('')
+export default function StudyPanel({ subject, onBack }) {
   const [session, setSession] = useState(null)
-
-  const studySubject = useMemo(
-    () => subjects.find((s) => s.id === studySubjectId) ?? null,
-    [subjects, studySubjectId],
-  )
 
   const currentQuestion = session
     ? session.questions[session.index]
@@ -37,11 +31,11 @@ export default function StudyPanel({ subjects }) {
   const [pendingSelection, setPendingSelection] = useState([])
 
   function startStudy() {
-    if (!studySubject || studySubject.questions.length === 0) {
+    if (!subject || subject.questions.length === 0) {
       return
     }
 
-    const preparedQuestions = shuffle(studySubject.questions).map((q) => {
+    const preparedQuestions = shuffle(subject.questions).map((q) => {
       const options = buildOptions(q)
       const isMulti = options.filter((o) => o.correct).length > 1
 
@@ -128,31 +122,18 @@ export default function StudyPanel({ subjects }) {
   }
 
   return (
-    <Panel title="Ôn bài trắc nghiệm">
+    <Panel title={`Ôn bài: ${subject.name}`}>
       {!session && (
         <>
           <div className="form">
-            <select
-              value={studySubjectId}
-              onChange={(e) => setStudySubjectId(e.target.value)}
-            >
-              <option value="">Chọn môn học để ôn</option>
-              {subjects.map((subject) => (
-                <option key={subject.id} value={subject.id}>
-                  {subject.name}
-                </option>
-              ))}
-            </select>
-            <button type="button" onClick={startStudy}>
+            <p className="muted">
+              Có {subject.questions.length} câu hỏi sẽ được trộn ngẫu nhiên.
+            </p>
+            <button type="button" onClick={startStudy} disabled={subject.questions.length === 0}>
               Bắt đầu ôn
             </button>
           </div>
-
-          <p className="muted">
-            {studySubject
-              ? `Có ${studySubject.questions.length} câu hỏi sẽ được trộn ngẫu nhiên.`
-              : 'Chọn môn học rồi bấm Bắt đầu ôn.'}
-          </p>
+          <button type="button" className="btn-back" onClick={onBack}>← Quay lại</button>
         </>
       )}
 
@@ -245,9 +226,12 @@ export default function StudyPanel({ subjects }) {
               {Math.round((session.score / session.questions.length) * 100)}%
             </strong>
           </p>
-          <button type="button" onClick={resetStudy}>
-            Ôn lại từ đầu
-          </button>
+          <div className="done-actions">
+            <button type="button" onClick={resetStudy}>
+              Ôn lại từ đầu
+            </button>
+            <button type="button" className="btn-back" onClick={onBack}>← Quay lại</button>
+          </div>
         </article>
       )}
     </Panel>

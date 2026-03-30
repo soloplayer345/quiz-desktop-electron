@@ -2,14 +2,16 @@
 
 .panel {
   background: var(--color-surface-panel);
-  border: 1px solid rgba($slate-900, 0.09);
+  border: 1px solid var(--color-border-subtle);
   border-radius: 18px;
   padding: 22px;
-  box-shadow: 0 8px 20px rgba($slate-900, 0.08);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   animation: rise-in 420ms ease-out;
+  transition: background 350ms ease, border-color 350ms ease;
 
   h2 {
     margin-top: 0;
     margin-bottom: 14px;
+    color: var(--color-text);
   }
 }

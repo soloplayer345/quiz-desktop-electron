@@ -1,8 +1,16 @@
 import './Hero.scss'
 
-export default function Hero() {
+export default function Hero({ theme, onToggleTheme }) {
   return (
     <section className="hero">
+      <button
+        className="theme-toggle"
+        onClick={onToggleTheme}
+        aria-label={theme === 'dark' ? 'Chuyển sang sáng' : 'Chuyển sang tối'}
+        title={theme === 'dark' ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối'}
+      >
+        {theme === 'dark' ? '☀️' : '🌙'}
+      </button>
       <p className="eyebrow">Quiz Desktop • Electron + React</p>
       <h1>Ôn bài nhanh với bộ câu hỏi trộn ngẫu nhiên</h1>
       <p className="lead">

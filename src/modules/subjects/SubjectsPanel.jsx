@@ -4,10 +4,8 @@ import { makeId } from '../../utils/helpers'
 import { exportSubject, importSubjectFromFile } from '../../utils/transfer'
 import './SubjectsPanel.scss'
 
-export default function SubjectsPanel({ subjects, onUpdateSubjects, onToast }) {
+export default function SubjectsPanel({ subjects, onUpdateSubjects, onToast, onEdit, onStudy }) {
   const [name, setName] = useState('')
-  const [editingId, setEditingId] = useState(null)
-  const [editName, setEditName] = useState('')
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -23,35 +21,6 @@ export default function SubjectsPanel({ subjects, onUpdateSubjects, onToast }) {
     ])
     setName('')
     onToast('Đã thêm môn học')
-  }
-
-  function startEdit(subject) {
-    setEditingId(subject.id)
-    setEditName(subject.name)
-  }
-
-  function cancelEdit() {
-    setEditingId(null)
-    setEditName('')
-  }
-
-  function saveEdit(subjectId) {
-    const trimmed = editName.trim()
-    if (!trimmed) return
-
-    onUpdateSubjects(
-      subjects.map((s) =>
-        s.id === subjectId ? { ...s, name: trimmed } : s,
-      ),
-    )
-    setEditingId(null)
-    setEditName('')
-    onToast('Đã cập nhật môn học')
-  }
-
-  function deleteSubject(subjectId) {
-    onUpdateSubjects(subjects.filter((s) => s.id !== subjectId))
-    onToast('Đã xóa môn học', 'danger')
   }
 
   function handleExport(subject) {
@@ -121,33 +90,13 @@ export default function SubjectsPanel({ subjects, onUpdateSubjects, onToast }) {
         ) : (
           subjects.map((subject) => (
             <article key={subject.id} className="subject-item">
-              {editingId === subject.id ? (
-                <div className="edit-row">
-                  <input
-                    value={editName}
-                    onChange={(e) => setEditName(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') saveEdit(subject.id)
-                      if (e.key === 'Escape') cancelEdit()
-                    }}
-                    autoFocus
-                  />
-                  <div className="action-buttons">
-                    <button type="button" className="btn-save" onClick={() => saveEdit(subject.id)}>Lưu</button>
-                    <button type="button" className="btn-cancel" onClick={cancelEdit}>Hủy</button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <h3>{subject.name}</h3>
-                  <p>{subject.questions.length} câu hỏi</p>
-                  <div className="action-buttons">
-                    <button type="button" className="btn-export" onClick={() => handleExport(subject)} title="Xuất file JSON">⬇ Xuất</button>
-                    <button type="button" className="btn-edit" onClick={() => startEdit(subject)}>Sửa</button>
-                    <button type="button" className="btn-delete" onClick={() => deleteSubject(subject.id)}>Xóa</button>
-                  </div>
-                </>
-              )}
+              <h3>{subject.name}</h3>
+              <p>{subject.questions.length} câu hỏi</p>
+              <div className="action-buttons">
+                <button type="button" className="btn-study" onClick={() => onStudy(subject.id)}>▶ Ôn bài</button>
+                <button type="button" className="btn-export" onClick={() => handleExport(subject)} title="Xuất file JSON">⬇ Xuất</button>
+                <button type="button" className="btn-edit" onClick={() => onEdit(subject.id)}>Sửa</button>
+              </div>
             </article>
           ))
         )}

@@ -5,7 +5,7 @@
 :root {
   font-family: 'Manrope', 'Segoe UI', sans-serif;
   line-height: 1.45;
-  color: $slate-900;
+  color: var(--color-text);
   background: var(--color-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,35 +13,75 @@
   -moz-osx-font-smoothing: grayscale;
 
   // ── Theme tokens (override these to switch themes) ──
-  --color-bg:             #{$blue-50};
-  --color-surface:        #{$white};
-  --color-surface-panel:  rgba(255, 255, 255, 0.85);
+  --color-bg:             #{$lp-yellow};
+  --color-surface:        #{$lp-surface};
+  --color-surface-panel:  rgba(160, 255, 230, 0.20);
 
-  --color-primary:        #{$sky-500};
-  --color-primary-light:  #{$sky-400};
-  --color-primary-bg:     #{$sky-100};
+  --color-primary:        #{$lp-pink};
+  --color-primary-light:  rgba(255, 213, 229, 0.7);
+  --color-primary-bg:     rgba(255, 213, 229, 0.35);
 
-  --color-danger:         #{$red-600};
-  --color-danger-light:   #{$red-500};
-  --color-danger-bg:      #{$red-100};
+  --color-danger:         #d04060;
+  --color-danger-light:   #f08090;
+  --color-danger-bg:      rgba(255, 180, 180, 0.30);
 
-  --color-success:        #{$green-600};
-  --color-success-bg:     #{$green-100};
+  --color-success:        #0a9e88;
+  --color-success-bg:     rgba(160, 255, 230, 0.35);
 
-  --color-accent:         #{$orange-600};
-  --color-accent-light:   #{$orange-400};
+  --color-accent:         #{$lp-cyan};
+  --color-accent-light:   #{$lp-mint};
 
-  --color-text:           #{$slate-900};
-  --color-text-muted:     #{$slate-600};
-  --color-text-secondary: #{$slate-700};
+  --color-text:           #{$lp-text};
+  --color-text-muted:     #{$lp-text-muted};
+  --color-text-secondary: rgba(26, 42, 58, 0.72);
 
-  --color-border:         #{$slate-300};
-  --color-border-subtle:  #{$slate-200};
-  --color-subtle-bg:      #{$slate-50};
+  --color-border:         #{$lp-mint};
+  --color-border-subtle:  rgba(160, 255, 230, 0.50);
+  --color-subtle-bg:      #{$lp-surface2};
 
-  --color-hero-base:      #{$slate-900};
-  --color-hero-mid:       #{$slate-800};
-  --color-hero-deep:      #{$navy-900};
+  --color-hero-base:      #{$lp-hero-base};
+  --color-hero-mid:       #{$lp-hero-mid};
+  --color-hero-deep:      #{$lp-hero-deep};
+
+  --color-btn-text:       #{$white};
+}
+
+// ── Dark theme ──
+[data-theme="dark"] {
+  color: #e2d4f8;
+  background: var(--color-bg);
+
+  --color-bg:             #{$dp-bg};
+  --color-surface:        #{$dp-surface};
+  --color-surface-panel:  rgba(34, 30, 66, 0.92);
+
+  --color-primary:        #{$dp-purple};
+  --color-primary-light:  #{$dp-blue};
+  --color-primary-bg:     rgba(185, 131, 255, 0.14);
+
+  --color-danger:         #f87171;
+  --color-danger-light:   #fca5a5;
+  --color-danger-bg:      rgba(248, 113, 113, 0.15);
+
+  --color-success:        #4ade80;
+  --color-success-bg:     rgba(74, 222, 128, 0.15);
+
+  --color-accent:         #{$dp-sky};
+  --color-accent-light:   #{$dp-cyan};
+
+  --color-text:           #e2d4f8;
+  --color-text-muted:     #{$dp-blue};
+  --color-text-secondary: #c0b4e8;
+
+  --color-border:         #{$dp-border};
+  --color-border-subtle:  #{$dp-surface2};
+  --color-subtle-bg:      #{$dp-surface};
+
+  --color-hero-base:      #0e0b1e;
+  --color-hero-mid:       #180f35;
+  --color-hero-deep:      #08051a;
+
+  --color-btn-text:       #{$dp-bg};
 }
 
 * {
@@ -51,10 +91,12 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 15% 15%, rgba($orange-400, 0.18), transparent 32%),
-    radial-gradient(circle at 85% 10%, rgba($sky-500, 0.18), transparent 36%),
-    linear-gradient(180deg, $blue-50 0%, $slate-50 60%);
+  background: $lp-yellow;
+  transition: background 350ms ease, color 350ms ease;
+
+  [data-theme="dark"] & {
+    background: $dp-bg;
+  }
 }
 
 h1,
@@ -77,25 +119,25 @@ select {
   width: 100%;
   box-sizing: border-box;
   border-radius: 10px;
-  border: 1px solid $slate-300;
+  border: 1px solid var(--color-border);
   padding: 10px 12px;
   background: var(--color-surface);
+  color: var(--color-text);
 }
 
 button {
   border: 0;
   border-radius: 10px;
   padding: 10px 14px;
-  background: linear-gradient(135deg, $orange-600, $orange-400);
-  color: var(--color-surface);
+  background: var(--color-accent);
+  color: var(--color-btn-text);
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 3px 10px rgba($orange-600, 0.3);
-  transition: transform 150ms ease, box-shadow 150ms ease;
+  transition: transform 150ms ease, filter 150ms ease;
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba($orange-600, 0.4);
+    filter: brightness(1.08);
   }
 
   &:disabled {

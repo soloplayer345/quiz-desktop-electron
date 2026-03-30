@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import Hero from './components/Hero/Hero'
-import Tabs from './components/Tabs/Tabs'
 import Toast from './components/Toast/Toast'
 import UpdateBanner from './components/UpdateBanner/UpdateBanner'
 import SubjectsPanel from './modules/subjects/SubjectsPanel'
@@ -14,10 +13,23 @@ const TOAST_DURATION = 2600
 
 function App() {
   const [subjects, setSubjects] = useState([])
-  const [tab, setTab] = useState('subjects')
+  const [view, setView] = useState('subjects') // 'subjects' | 'edit' | 'study'
+  const [selectedSubjectId, setSelectedSubjectId] = useState(null)
   const [toasts, setToasts] = useState([])
   const [updateState, setUpdateState] = useState(null) // 'available' | 'ready'
   const [downloadProgress, setDownloadProgress] = useState(null)
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem('theme') ?? 'light'
+  )
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  function toggleTheme() {
+    setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
+  }
 
   useEffect(() => {
     loadSubjectsAsync().then(setSubjects)
@@ -46,19 +58,57 @@ function App() {
     saveSubjects(nextSubjects)
   }
 
+  function goToEdit(subjectId) {
+    setSelectedSubjectId(subjectId)
+    setView('edit')
+  }
+
+  function goToStudy(subjectId) {
+    setSelectedSubjectId(subjectId)
+    setView('study')
+  }
+
+  function goBack() {
+    setView('subjects')
+    setSelectedSubjectId(null)
+  }
+
+  function deleteSubject(subjectId) {
+    updateSubjects(subjects.filter((s) => s.id !== subjectId))
+    goBack()
+    showToast('Đã xóa môn học', 'danger')
+  }
+
+  const selectedSubject = subjects.find((s) => s.id === selectedSubjectId) ?? null
+
   return (
     <main className="page">
-      <Hero />
-      <Tabs active={tab} onChange={setTab} />
+      <Hero theme={theme} onToggleTheme={toggleTheme} />
 
-      {tab === 'subjects' && (
-        <SubjectsPanel subjects={subjects} onUpdateSubjects={updateSubjects} onToast={showToast} />
+      {view === 'subjects' && (
+        <SubjectsPanel
+          subjects={subjects}
+          onUpdateSubjects={updateSubjects}
+          onToast={showToast}
+          onEdit={goToEdit}
+          onStudy={goToStudy}
+        />
       )}
-      {tab === 'questions' && (
-        <QuestionsPanel subjects={subjects} onUpdateSubjects={updateSubjects} onToast={showToast} />
+      {view === 'edit' && selectedSubject && (
+        <QuestionsPanel
+          subject={selectedSubject}
+          subjects={subjects}
+          onUpdateSubjects={updateSubjects}
+          onToast={showToast}
+          onBack={goBack}
+          onDeleteSubject={deleteSubject}
+        />
       )}
-      {tab === 'study' && (
-        <StudyPanel subjects={subjects} />
+      {view === 'study' && selectedSubject && (
+        <StudyPanel
+          subject={selectedSubject}
+          onBack={goBack}
+        />
       )}
 
       <Toast toasts={toasts} />
