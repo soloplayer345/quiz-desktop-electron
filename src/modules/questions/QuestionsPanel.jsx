@@ -30,6 +30,48 @@ function questionToOptions(question) {
   ]
 }
 
+// ── Option form (shared between add & edit) ──
+function OptionRows({ opts, onUpdate, onRemove, onAdd }) {
+  return (
+    <>
+      <p className="options-hint">Nhập đáp án và tích vào ô đúng (có thể chọn nhiều)</p>
+      <div className="option-rows">
+        {opts.map((opt, i) => (
+          <div key={i} className={`option-row${opt.correct ? ' is-correct' : ''}`}>
+            <label className="option-label">{labelOf(i)}</label>
+            <textarea
+              className="option-input"
+              value={opt.text}
+              onChange={(e) => onUpdate(i, 'text', e.target.value)}
+              placeholder={`Đáp án ${labelOf(i)}`}
+              rows={2}
+            />
+            <label className="correct-toggle" title="Đáp án đúng">
+              <input
+                type="checkbox"
+                checked={opt.correct}
+                onChange={(e) => onUpdate(i, 'correct', e.target.checked)}
+              />
+              <span className="checkmark" />
+            </label>
+            {opts.length > 2 && (
+              <button
+                type="button"
+                className="btn-remove-option"
+                onClick={() => onRemove(i)}
+                title="Xóa đáp án này"
+              >✕</button>
+            )}
+          </div>
+        ))}
+      </div>
+      <button type="button" className="btn-add-option" onClick={onAdd}>
+        + Thêm đáp án
+      </button>
+    </>
+  )
+}
+
 export default function QuestionsPanel({ subject, subjects, onUpdateSubjects, onToast, onBack, onDeleteSubject }) {
   const [questionText, setQuestionText] = useState('')
   const [options, setOptions] = useState(emptyOptions)
@@ -97,7 +139,18 @@ export default function QuestionsPanel({ subject, subjects, onUpdateSubjects, on
     const hasAllFilled = filled.every((o) => o.text !== '')
     const hasCorrect = filled.some((o) => o.correct)
 
-    if (!prompt || !hasAllFilled || !hasCorrect) return
+    if (!prompt) {
+      onToast('Vui lòng nhập nội dung câu hỏi!', 'danger')
+      return
+    }
+    if (!hasAllFilled) {
+      onToast('Vui lòng điền đầy đủ tất cả đáp án!', 'danger')
+      return
+    }
+    if (!hasCorrect) {
+      onToast('Vui lòng tích chọn ít nhất một đáp án đúng!', 'danger')
+      return
+    }
 
     // Check duplicate
     const normalized = normalizeText(prompt)
@@ -160,7 +213,18 @@ export default function QuestionsPanel({ subject, subjects, onUpdateSubjects, on
     const hasAllFilled = filled.every((o) => o.text !== '')
     const hasCorrect = filled.some((o) => o.correct)
 
-    if (!prompt || !hasAllFilled || !hasCorrect) return
+    if (!prompt) {
+      onToast('Vui lòng nhập nội dung câu hỏi!', 'danger')
+      return
+    }
+    if (!hasAllFilled) {
+      onToast('Vui lòng điền đầy đủ tất cả đáp án!', 'danger')
+      return
+    }
+    if (!hasCorrect) {
+      onToast('Vui lòng tích chọn ít nhất một đáp án đúng!', 'danger')
+      return
+    }
 
     // Check duplicate (exclude the question being edited)
     const normalized = normalizeText(prompt)
@@ -205,47 +269,6 @@ export default function QuestionsPanel({ subject, subjects, onUpdateSubjects, on
     )
     setEditingName(false)
     onToast('Đã đổi tên môn học')
-  }
-
-  // ── Option form (shared between add & edit) ──
-  function OptionRows({ opts, onUpdate, onRemove, onAdd }) {
-    return (
-      <>
-        <p className="options-hint">Nhập đáp án và tích vào ô đúng (có thể chọn nhiều)</p>
-        <div className="option-rows">
-          {opts.map((opt, i) => (
-            <div key={i} className={`option-row${opt.correct ? ' is-correct' : ''}`}>
-              <label className="option-label">{labelOf(i)}</label>
-              <input
-                className="option-input"
-                value={opt.text}
-                onChange={(e) => onUpdate(i, 'text', e.target.value)}
-                placeholder={`Đáp án ${labelOf(i)}`}
-              />
-              <label className="correct-toggle" title="Đáp án đúng">
-                <input
-                  type="checkbox"
-                  checked={opt.correct}
-                  onChange={(e) => onUpdate(i, 'correct', e.target.checked)}
-                />
-                <span className="checkmark" />
-              </label>
-              {opts.length > 2 && (
-                <button
-                  type="button"
-                  className="btn-remove-option"
-                  onClick={() => onRemove(i)}
-                  title="Xóa đáp án này"
-                >✕</button>
-              )}
-            </div>
-          ))}
-        </div>
-        <button type="button" className="btn-add-option" onClick={onAdd}>
-          + Thêm đáp án
-        </button>
-      </>
-    )
   }
 
   const totalCount = subject.questions.length

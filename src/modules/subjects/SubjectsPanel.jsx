@@ -12,6 +12,15 @@ export default function SubjectsPanel({ subjects, onUpdateSubjects, onToast, onE
     const trimmed = name.trim()
 
     if (!trimmed) {
+      onToast('Vui lòng nhập tên môn học!', 'danger')
+      return
+    }
+
+    const isDuplicate = subjects.some(
+      (s) => s.name.trim().toLowerCase() === trimmed.toLowerCase()
+    )
+    if (isDuplicate) {
+      onToast('Môn học này đã tồn tại!', 'danger')
       return
     }
 

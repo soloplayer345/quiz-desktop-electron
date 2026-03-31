@@ -32,6 +32,9 @@
   background: var(--color-subtle-bg);
   color: var(--color-text);
   font-weight: 500;
+  padding: 10px 14px;
+  word-break: break-word;
+  white-space: normal;
   transition: background 150ms ease, border-color 150ms ease;
 
   .opt-letter {
