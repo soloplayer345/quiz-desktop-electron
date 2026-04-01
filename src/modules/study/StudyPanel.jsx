@@ -139,9 +139,12 @@ export default function StudyPanel({ subject, onBack }) {
 
       {session && currentQuestion && !session.done && (
         <article className="quiz-card">
-          <p className="progress">
-            Câu {session.index + 1}/{session.questions.length}
-          </p>
+          <div className="quiz-card-header">
+            <p className="progress">
+              Câu {session.index + 1}/{session.questions.length}
+            </p>
+            <button type="button" className="btn-back" onClick={onBack}>← Quay lại</button>
+          </div>
           <h3>{currentQuestion.prompt}</h3>
 
           {currentQuestion.isMulti && !currentAnswer && (
