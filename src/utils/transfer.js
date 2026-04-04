@@ -44,26 +44,34 @@ export async function importSubjectFromFile(file) {
     throw new Error('File không đúng định dạng quiz.')
   }
 
-  const questions = data.questions.map((q) => {
-    if (
-      !q.prompt ||
-      !Array.isArray(q.options) ||
-      q.options.length < 2 ||
-      !q.options.some((o) => o.correct)
-    ) {
-      throw new Error(`Câu hỏi "${q.prompt ?? '?'}" không hợp lệ.`)
-    }
-
-    return {
+  const skipped = []
+  const questions = data.questions
+    .filter((q) => {
+      if (
+        !q.prompt ||
+        !Array.isArray(q.options) ||
+        q.options.length < 2 ||
+        !q.options.some((o) => o.correct)
+      ) {
+        if (q.prompt) skipped.push(q.prompt)
+        return false
+      }
+      return true
+    })
+    .map((q) => ({
       id: makeId('question'),
       prompt: q.prompt,
       options: q.options.map(({ text, correct }) => ({ text: text ?? '', correct: !!correct })),
-    }
-  })
+    }))
+
+  if (questions.length === 0) {
+    throw new Error('Không tìm thấy câu hỏi hợp lệ nào trong file.')
+  }
 
   return {
     id: makeId('subject'),
     name: String(data.name),
     questions,
+    _skipped: skipped.length,
   }
 }

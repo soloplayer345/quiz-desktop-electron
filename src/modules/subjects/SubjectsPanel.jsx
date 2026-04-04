@@ -57,15 +57,17 @@ export default function SubjectsPanel({ subjects, onUpdateSubjects, onToast, onE
         )
         const merged = { ...existing, questions: [...existing.questions, ...toAdd] }
         onUpdateSubjects(subjects.map((s) => (s.id === existing.id ? merged : s)))
+        const skipNote = newSubject._skipped > 0 ? ` — bỏ qua ${newSubject._skipped} câu không hợp lệ` : ''
         onToast(
           toAdd.length > 0
-            ? `Đã gộp vào "${existing.name}": +${toAdd.length} câu mới (bỏ qua ${newSubject.questions.length - toAdd.length} câu trùng)`
-            : `Không có câu hỏi mới để gộp vào "${existing.name}"`,
+            ? `Đã gộp vào "${existing.name}": +${toAdd.length} câu mới (bỏ qua ${newSubject.questions.length - toAdd.length} câu trùng${skipNote})`
+            : `Không có câu hỏi mới để gộp vào "${existing.name}"${skipNote}`,
           toAdd.length > 0 ? 'success' : 'info'
         )
       } else {
         onUpdateSubjects([...subjects, newSubject])
-        onToast(`Đã nhập "${newSubject.name}" (${newSubject.questions.length} câu hỏi)`)
+        const skipNote = newSubject._skipped > 0 ? ` (bỏ qua ${newSubject._skipped} câu không hợp lệ)` : ''
+        onToast(`Đã nhập "${newSubject.name}" (${newSubject.questions.length} câu hỏi${skipNote})`)
       }
     } catch (err) {
       onToast(err.message, 'danger')
@@ -92,6 +94,42 @@ export default function SubjectsPanel({ subjects, onUpdateSubjects, onToast, onE
           onChange={handleImportFile}
         />
       </form>
+
+      <details className="import-guide">
+        <summary>📄 Định dạng file JSON để nhập</summary>
+        <div className="import-guide__body">
+          <p>File phải là <code>.json</code> với cấu trúc sau. Mỗi câu hỏi cần ít nhất <strong>2 lựa chọn</strong> và đúng <strong>1 đáp án đúng</strong> (<code>"correct": true</code>).</p>
+          <pre>{`{
+  "version": 1,
+  "name": "Tên môn học",
+  "questions": [
+    {
+      "prompt": "Câu hỏi số 1?",
+      "options": [
+        { "text": "Đáp án A", "correct": false },
+        { "text": "Đáp án B", "correct": true },
+        { "text": "Đáp án C", "correct": false },
+        { "text": "Đáp án D", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Câu hỏi số 2?",
+      "options": [
+        { "text": "Đáp án A", "correct": true },
+        { "text": "Đáp án B", "correct": false }
+      ]
+    }
+  ]
+}`}</pre>
+          <ul>
+            <li><code>"name"</code> — tên môn học (bắt buộc)</li>
+            <li><code>"prompt"</code> — nội dung câu hỏi (bắt buộc)</li>
+            <li><code>"text"</code> — nội dung lựa chọn (bắt buộc)</li>
+            <li><code>"correct": true</code> — đánh dấu đáp án đúng (bắt buộc, mỗi câu ít nhất 1)</li>
+          </ul>
+          <p className="import-guide__note">Câu hỏi thiếu <code>prompt</code>, thiếu <code>correct</code>, hoặc có ít hơn 2 lựa chọn sẽ tự động bị bỏ qua khi nhập.</p>
+        </div>
+      </details>
 
       <div className="subject-list">
         {subjects.length === 0 ? (
